@@ -76,20 +76,7 @@ MESSAGE_STAR_WARS_DAIKYO = [
     ,'「自惚れ屋の、戯け者の、みすぼらしいナーフ飼いなんかに！」(Why, you stuck-up, half-witted, scruffy-looking …nerf-herder!)'
     ]
 
-# メッセージIDの永続化用の関数
-def load_processed_messages():
-    try:
-        with open('processed_messages.json', 'r') as file:
-            return set(json.load(file))  # setに変換
-    except FileNotFoundError:
-        return set()
-
-def save_processed_messages():
-    with open('processed_messages.json', 'w') as file:
-        json.dump(list(processed_messages), file)  # setをlistに変換して保存
-
-# メッセージIDの永続化
-processed_messages = load_processed_messages()
+processed_messages = set()
 
 # ========================================================
 #  ★ Lambda を呼び出す関数（ここが今回の追加ポイント）
@@ -130,17 +117,14 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    global processed_messages
-
     # メッセージがすでに処理されている場合はスキップ
     if message.author == client.user or message.id in processed_messages:
         return
 
-    # メッセージIDを処理済みとしてフラグを立てる
-    processed_messages.add(message.id)
+    print(f"[LOG] message received: {message.content}")
 
-    # メッセージ処理が終わったら永続化
-    save_processed_messages()
+    # メッセージIDを processed_messages に追加
+    processed_messages.add(message.id)
 
     # --------------------------
     #  おみくじ
