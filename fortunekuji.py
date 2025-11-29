@@ -111,6 +111,7 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
+    print(f"[LOG] message received: {message.content}")
     if message.author == client.user:
         return
 
