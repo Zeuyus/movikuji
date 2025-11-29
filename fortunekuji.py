@@ -76,6 +76,8 @@ MESSAGE_STAR_WARS_DAIKYO = [
     ,'「自惚れ屋の、戯け者の、みすぼらしいナーフ飼いなんかに！」(Why, you stuck-up, half-witted, scruffy-looking …nerf-herder!)'
     ]
 
+processed_messages = set()
+
 # ========================================================
 #  ★ Lambda を呼び出す関数（ここが今回の追加ポイント）
 # ========================================================
@@ -115,9 +117,14 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    print(f"[LOG] message received: {message.content}")
-    if message.author == client.user:
+    # メッセージがすでに処理されている場合はスキップ
+    if message.author == client.user or message.id in processed_messages:
         return
+
+    print(f"[LOG] message received: {message.content}")
+
+    # メッセージを処理済みとしてフラグを立てる
+    processed_messages.add(message.id)
 
     # --------------------------
     #  おみくじ
