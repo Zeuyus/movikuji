@@ -185,31 +185,41 @@ async def on_message(message):
                 embed.set_image(url=random.choice(MESSAGE_STAR_WARS_DAIKYO_URL_UNUBORE))
                 await message.channel.send(embed=embed)
 
-    #===========================================================
-    #  EC2 起動
-    #===========================================================
-    if message.content == '!ec2_start':
+        # ========================================
+        #  EC2 起動処理を必ず実行
+        # ========================================
         await message.channel.send("🚀 EC2 起動リクエスト中…")
-
-        result = call_lambda("start")
-
-        if "error" in result:
-            await message.channel.send(f"❌ エラー発生\n```{result}```")
+        result_lambda = call_lambda("start")
+        if "error" in result_lambda:
+            await message.channel.send(f"❌ EC2 起動エラー\n```{result_lambda}```")
         else:
-            await message.channel.send(f"✅ 成功\n```{result}```")
+            await message.channel.send(f"✅ EC2 起動成功\n```{result_lambda}```")
+
+    # #===========================================================
+    # #  EC2 起動
+    # #===========================================================
+    # if message.content == '!ec2_start':
+    #     await message.channel.send("🚀 EC2 起動リクエスト中…")
+
+    #     result = call_lambda("start")
+
+    #     if "error" in result:
+    #         await message.channel.send(f"❌ エラー発生\n```{result}```")
+    #     else:
+    #         await message.channel.send(f"✅ 成功\n```{result}```")
 
 
-    #===========================================================
-    #  EC2 停止
-    #===========================================================
-    if message.content == '!ec2_stop':
-        await message.channel.send("🛑 EC2 停止リクエスト中…")
+    # #===========================================================
+    # #  EC2 停止
+    # #===========================================================
+    # if message.content == '!ec2_stop':
+    #     await message.channel.send("🛑 EC2 停止リクエスト中…")
 
-        result = call_lambda("stop")
+    #     result = call_lambda("stop")
 
-        if "error" in result:
-            await message.channel.send(f"❌ エラー発生\n```{result}```")
-        else:
-            await message.channel.send(f"🟢 成功\n```{result}```")
+    #     if "error" in result:
+    #         await message.channel.send(f"❌ エラー発生\n```{result}```")
+    #     else:
+    #         await message.channel.send(f"🟢 成功\n```{result}```")
 
 client.run(TOKEN)
