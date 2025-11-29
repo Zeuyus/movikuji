@@ -1,9 +1,9 @@
 from dotenv import load_dotenv
-import os
 import discord
-
-# 乱数を使うのでimport
+import requests
+import os
 import random
+
 intents = discord.Intents.default()
 intents.message_content = True
 client = discord.Client(intents=intents)
@@ -11,6 +11,8 @@ client = discord.Client(intents=intents)
 load_dotenv()
 
 TOKEN = os.getenv("DISCORD_TOKEN")
+LAMBDA_API_URL = os.getenv("LAMBDA_API_URL")
+
 # ここも追加分
 OMIKUJI = [
     '大吉', '吉', '中吉', '小吉', '末吉', '凶', '大凶'
@@ -27,6 +29,17 @@ MESSAGE_STAR_WARS_DAIKICHI_URL_FORCE = [
     ,'https://livedoor.blogimg.jp/swgm1138/imgs/4/f/4f09d098.png'
     ,'https://livedoor.blogimg.jp/swgm1138/imgs/5/b/5b576202.png'
     ]
+
+MESSAGE_STAR_WARS_DAIKYO_URL_TRIP = [
+    'https://hollywoodreporter.jp/wp-content/uploads/2025/03/7Admiral-Ackbar-Star-Wars-BTS-Everett-MCDSTWA_EC191-H-2023.jpg'
+    ]
+MESSAGE_STAR_WARS_DAIKYO_URL_KAKURITU = [
+    'https://hollywoodreporter.jp/wp-content/uploads/2025/03/15Star-Wars-C-3PO-Harrison-Ford-Everett-MSDEMST_EC061-H-2023.jpg'
+    ]
+MESSAGE_STAR_WARS_DAIKYO_URL_UNUBORE = [
+    'https://hollywoodreporter.jp/wp-content/uploads/2025/03/16Star-Wars-Carrie-Fisher-Harrison-Ford-Everett-MSDEMST_EC052.-H-2023jpg.jpg'
+    ]
+
 MESSAGE_STAR_WARS_DAIKICHI = [
     '「フォースと共にあらんことを」 (May the Force be with you.)'
     ,'「希望は太陽のようなもの。見える時だけ信じるなら、夜を越えることはできない」 (Hope is like the sun. If you only believe in it when you can see it, you will never make it through the night.)'
@@ -63,15 +76,36 @@ MESSAGE_STAR_WARS_DAIKYO = [
     ,'「自惚れ屋の、戯け者の、みすぼらしいナーフ飼いなんかに！」(Why, you stuck-up, half-witted, scruffy-looking …nerf-herder!)'
     ]
 
+# ========================================================
+#  ★ Lambda を呼び出す関数（ここが今回の追加ポイント）
+# ========================================================
+def call_lambda(action: str):
+    try:
+        response = requests.post(
+            LAMBDA_API_URL,
+            json={"action": action},
+            timeout=30
+        )
+        return response.json()
+    except Exception as e:
+        return {"error": str(e)}
+
+
+# ========================================================
+#  Discord Bot メイン処理
+# ========================================================
 @client.event
 async def on_ready():
-    print(f'We have logged in as {client.user}')
+    print(f'Logged in as {client.user}')
 
 @client.event
 async def on_message(message):
     if message.author == client.user:
         return
 
+    # --------------------------
+    #  おみくじ
+    # --------------------------
     if message.content.strip() == '!おみくじ':
         result = random.choice(OMIKUJI)
         await message.channel.send(f'あなたの運勢は 「{result}」\n')
@@ -83,6 +117,9 @@ async def on_message(message):
         else:
             await message.channel.send('✨ 普通の日かも〜')
 
+    # --------------------------
+    #  STARWARS おみくじ
+    # --------------------------
     if message.content.strip() == '!STARWARS':
         result = random.choice(OMIKUJI)
         await message.channel.send(f'あなたの運勢は 「{result}」\n')
@@ -121,5 +158,44 @@ async def on_message(message):
         elif result == '大凶':
             extra_message = random.choice(MESSAGE_STAR_WARS_DAIKYO)
             await message.channel.send(f'💀 : {extra_message}')
+
+            # 大凶
+            if extra_message == '「罠だ！」 (It’s a trap!)':
+                embed = discord.Embed(title=f'🎉 : {extra_message}')
+                embed.set_image(url=random.choice(MESSAGE_STAR_WARS_DAIKYO_URL_TRIP))
+                await message.channel.send(embed=embed)
+            elif extra_message == '「確率なんてクソくらえだ！」(Never tell me the odds!)':
+                embed = discord.Embed(title=f'🎉 : {extra_message}')
+                embed.set_image(url=random.choice(MESSAGE_STAR_WARS_DAIKYO_URL_KAKURITU))
+                await message.channel.send(embed=embed)
+            elif extra_message == '「自惚れ屋の、戯け者の、みすぼらしいナーフ飼いなんかに！」(Why, you stuck-up, half-witted, scruffy-looking …nerf-herder!)':
+                embed = discord.Embed(title=f'🎉 : {extra_message}')
+                embed.set_image(url=random.choice(MESSAGE_STAR_WARS_DAIKYO_URL_UNUBORE))
+                await message.channel.send(embed=embed)
+
+# =====================================================
+    #   ★ EC2 起動コマンド
+    # =====================================================
+    if message.content.strip() == '!ec2_start':
+        await message.channel.send("🚀 EC2 の起動をリクエストしました...")
+        result = call_lambda("start")
+
+        if "error" in result:
+            await message.channel.send(f"❌ エラー: {result['error']}")
+        else:
+            await message.channel.send(f"✅ Lambda 実行完了: {result}")
+
+
+    # =====================================================
+    #   ★ EC2 停止コマンド
+    # =====================================================
+    if message.content.strip() == '!ec2_stop':
+        await message.channel.send("🛑 EC2 の停止をリクエストしました...")
+        result = call_lambda("stop")
+
+        if "error" in result:
+            await message.channel.send(f"❌ エラー: {result['error']}")
+        else:
+            await message.channel.send(f"🟢 Lambda 実行完了: {result}")
 
 client.run(TOKEN)
