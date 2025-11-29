@@ -92,6 +92,10 @@ def call_lambda(action: str):
         print(f"📡 Lambda 応答ステータス: {response.status_code}")
         print(f"📡 Lambda 応答内容: {response.text}")
 
+        # ステータスコードが 400 以上の場合、エラーとして処理
+        if response.status_code >= 400:
+            return {"error": f"Lambda API call failed with status code {response.status_code}", "details": response.text}
+
         # JSON 化できない場合はそのまま返す
         try:
             return response.json()
@@ -190,6 +194,8 @@ async def on_message(message):
         # ========================================
         await message.channel.send("🚀 EC2 起動リクエスト中…")
         result_lambda = call_lambda("start")
+
+        # Lambda のエラーとステータスコードをチェック
         if "error" in result_lambda:
             await message.channel.send(f"❌ EC2 起動エラー\n```{result_lambda}```")
         else:
