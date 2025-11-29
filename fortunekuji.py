@@ -3,14 +3,13 @@ import random
 import requests
 import os
 from dotenv import load_dotenv
+# .envの読み込み
+load_dotenv()
 
 # Discord設定
 intents = discord.Intents.default()
 intents.message_content = True
 client = discord.Client(intents=intents)
-
-# .envの読み込み
-load_dotenv()
 
 TOKEN = os.getenv("DISCORD_TOKEN")
 LAMBDA_API_URL = os.getenv("LAMBDA_API_URL")
