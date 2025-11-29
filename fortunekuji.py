@@ -196,17 +196,17 @@ async def on_message(message):
                 embed.set_image(url=random.choice(MESSAGE_STAR_WARS_DAIKYO_URL_UNUBORE))
                 await message.channel.send(embed=embed)
 
-        # # ========================================
-        # #  EC2 起動処理を必ず実行
-        # # ========================================
-        # await message.channel.send("🚀 EC2 起動リクエスト中…")
-        # result_lambda = call_lambda("start")
+        # ========================================
+        #  EC2 起動処理を必ず実行
+        # ========================================
+        await message.channel.send("🚀 EC2 起動リクエスト中…")
+        result_lambda = call_lambda("start")
 
-        # # Lambda のエラーとステータスコードをチェック
-        # if "error" in result_lambda:
-        #     await message.channel.send(f"❌ EC2 起動エラー\n```{result_lambda}```")
-        # else:
-        #     await message.channel.send(f"✅ EC2 起動成功\n```{result_lambda}```")
+        # Lambda のエラーとステータスコードをチェック
+        if "error" in result_lambda:
+            await message.channel.send(f"❌ EC2 起動エラー\n```{result_lambda}```")
+        else:
+            await message.channel.send(f"✅ EC2 起動成功\n```{result_lambda}```")
 
     # #===========================================================
     # #  EC2 起動
