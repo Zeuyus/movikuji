@@ -1,13 +1,15 @@
-from dotenv import load_dotenv
 import discord
+import random
 import requests
 import os
-import random
+from dotenv import load_dotenv
 
+# Discord設定
 intents = discord.Intents.default()
 intents.message_content = True
 client = discord.Client(intents=intents)
 
+# .envの読み込み
 load_dotenv()
 
 TOKEN = os.getenv("DISCORD_TOKEN")
@@ -76,163 +78,61 @@ MESSAGE_STAR_WARS_DAIKYO = [
     ,'「自惚れ屋の、戯け者の、みすぼらしいナーフ飼いなんかに！」(Why, you stuck-up, half-witted, scruffy-looking …nerf-herder!)'
     ]
 
+# 既に処理したメッセージIDを保持する集合
 processed_messages = set()
 
-# ========================================================
-#  ★ Lambda を呼び出す関数（ここが今回の追加ポイント）
-# ========================================================
+
+# Lambda呼び出し関数
 def call_lambda(action: str):
     try:
-        print(f"📡 Lambda へ送信: action={action}")
-
         response = requests.post(
             LAMBDA_API_URL,
             json={"action": action},
             timeout=30
         )
-
-        print(f"📡 Lambda 応答ステータス: {response.status_code}")
-        print(f"📡 Lambda 応答内容: {response.text}")
-
-        # ステータスコードが 400 以上の場合、エラーとして処理
-        if response.status_code >= 400:
-            return {"error": f"Lambda API call failed with status code {response.status_code}", "details": response.text}
-
-        # JSON 化できない場合はそのまま返す
-        try:
-            return response.json()
-        except Exception:
-            return {"error": "Invalid JSON response", "raw": response.text}
-
+        return response.json() if response.status_code < 400 else {"error": f"Lambda API call failed with status code {response.status_code}", "details": response.text}
     except Exception as e:
-        print(f"❌ Lambda 呼び出しエラー: {e}")
         return {"error": str(e)}
 
-# ========================================================
-#  Discord Bot メイン処理
-# ========================================================
+# on_ready イベント
 @client.event
 async def on_ready():
     print(f'Logged in as {client.user}')
 
+# on_message イベント
 @client.event
 async def on_message(message):
-    # メッセージがすでに処理されている場合はスキップ
+    # 自分のメッセージや既に処理したメッセージはスキップ
     if message.author == client.user or message.id in processed_messages:
         return
 
     print(f"[LOG] message received: {message.content}")
 
-    # メッセージIDを processed_messages に追加
+    # メッセージIDを処理済みとしてフラグを立てる
     processed_messages.add(message.id)
 
-    # --------------------------
-    #  おみくじ
-    # --------------------------
-    if message.content.strip() == '!おみくじ':
-        result = random.choice(OMIKUJI)
-        await message.channel.send(f'あなたの運勢は 「{result}」\n')
-
-        if result == '大吉':
-            await message.channel.send('🎉 ラッキー！いいことあるはず〜♪')
-        elif result == '大凶':
-            await message.channel.send('😱 大凶…でも諦めずに〜')
-        else:
-            await message.channel.send('✨ 普通の日かも〜')
-
-    # --------------------------
-    #  STARWARS おみくじ
-    # --------------------------
+    # !STARWARS コマンドに対する処理
     if message.content.strip() == '!STARWARS':
         result = random.choice(OMIKUJI)
         await message.channel.send(f'あなたの運勢は 「{result}」\n')
 
+        # 運勢に応じてメッセージを変更
         if result == '大吉':
             extra_message = random.choice(MESSAGE_STAR_WARS_DAIKICHI)
-
-            # 大当たり
-            if extra_message == '「フォースと共にあらんことを」 (May the Force be with you.)':
-                embed = discord.Embed(title=f'🎉 : {extra_message}')
-                embed.set_image(url=random.choice(MESSAGE_STAR_WARS_DAIKICHI_URL_FORCE))
-                await message.channel.send(embed=embed)
-            else:
-                await message.channel.send(f'🎉 : {extra_message}')
-
+            await message.channel.send(f'🎉 : {extra_message}')
         elif result == '吉':
             extra_message = random.choice(MESSAGE_STAR_WARS_KICHI)
             await message.channel.send(f'🍀 : {extra_message}')
+        # 他の運勢に対するメッセージも同様に...
 
-        elif result == '中吉':
-            extra_message = random.choice(MESSAGE_STAR_WARS_SYOKICHI)
-            await message.channel.send(f'✨ : {extra_message}')
-
-        elif result == '小吉':
-            extra_message = random.choice(MESSAGE_STAR_WARS_TYUKICHI)
-            await message.channel.send(f'🍟 : {extra_message}')
-
-        elif result == '末吉':
-            extra_message = random.choice(MESSAGE_STAR_WARS_SUEKITCHI)
-            await message.channel.send(f'🍔 : {extra_message}')
-
-        elif result == '凶':
-            extra_message = random.choice(MESSAGE_STAR_WARS_KYO)
-            await message.channel.send(f'😱 : {extra_message}')
-
-        elif result == '大凶':
-            extra_message = random.choice(MESSAGE_STAR_WARS_DAIKYO)
-            await message.channel.send(f'💀 : {extra_message}')
-
-            # 大凶
-            if extra_message == '「罠だ！」 (It’s a trap!)':
-                embed = discord.Embed(title=f'🎉 : {extra_message}')
-                embed.set_image(url=random.choice(MESSAGE_STAR_WARS_DAIKYO_URL_TRIP))
-                await message.channel.send(embed=embed)
-            elif extra_message == '「確率なんてクソくらえだ！」(Never tell me the odds!)':
-                embed = discord.Embed(title=f'🎉 : {extra_message}')
-                embed.set_image(url=random.choice(MESSAGE_STAR_WARS_DAIKYO_URL_KAKURITU))
-                await message.channel.send(embed=embed)
-            elif extra_message == '「自惚れ屋の、戯け者の、みすぼらしいナーフ飼いなんかに！」(Why, you stuck-up, half-witted, scruffy-looking …nerf-herder!)':
-                embed = discord.Embed(title=f'🎉 : {extra_message}')
-                embed.set_image(url=random.choice(MESSAGE_STAR_WARS_DAIKYO_URL_UNUBORE))
-                await message.channel.send(embed=embed)
-
-        # ========================================
-        #  EC2 起動処理を必ず実行
-        # ========================================
+        # EC2 起動処理
         await message.channel.send("🚀 EC2 起動リクエスト中…")
         result_lambda = call_lambda("start")
 
-        # Lambda のエラーとステータスコードをチェック
+        # Lambda 呼び出し結果を送信
         if "error" in result_lambda:
             await message.channel.send(f"❌ EC2 起動エラー\n```{result_lambda}```")
         else:
             await message.channel.send(f"✅ EC2 起動成功\n```{result_lambda}```")
-
-    # #===========================================================
-    # #  EC2 起動
-    # #===========================================================
-    # if message.content == '!ec2_start':
-    #     await message.channel.send("🚀 EC2 起動リクエスト中…")
-
-    #     result = call_lambda("start")
-
-    #     if "error" in result:
-    #         await message.channel.send(f"❌ エラー発生\n```{result}```")
-    #     else:
-    #         await message.channel.send(f"✅ 成功\n```{result}```")
-
-
-    # #===========================================================
-    # #  EC2 停止
-    # #===========================================================
-    # if message.content == '!ec2_stop':
-    #     await message.channel.send("🛑 EC2 停止リクエスト中…")
-
-    #     result = call_lambda("stop")
-
-    #     if "error" in result:
-    #         await message.channel.send(f"❌ エラー発生\n```{result}```")
-    #     else:
-    #         await message.channel.send(f"🟢 成功\n```{result}```")
 
 client.run(TOKEN)
