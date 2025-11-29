@@ -245,6 +245,9 @@ async def on_message(message):
                 await message.channel.send("✅ サーバーが正常に起動しました。")
                 wait_for_instance_to_run(INSTANCE_ID)  # 起動が完了するまで待機
 
+        result = random.choice(OMIKUJI)
+        await message.channel.send(f'あなたの運勢は 「{result}」\n')
+
         if result == '大吉':
             extra_message = random.choice(MESSAGE_STAR_WARS_DAIKICHI)
 
