@@ -40,7 +40,7 @@ MESSAGE_STAR_WARS_DAIKICHI_URL_TASUKETE = [
 
 MESSAGE_STAR_WARS_KICHI = [
     '「私にはフォースがついている。フォースは私と共にある」(I’m one with the Force. The Force is with me.)'
-    ,'「あんたが憎い！」「弟と思ってた。愛してた！」 (I hate you! You were my brother, Anakin. I loved you..)'
+    ,'「あんたが憎い！」「弟と思ってた。愛してた！」 (I hate you! You were my brother, Anakin. I loved you.)'
     ,'「違う！やるか、やらぬかだ。ためしなどいらん。(No! Try not. Do. Or do not. There is no try.)」'
     ]
 
@@ -203,39 +203,108 @@ async def on_message(message):
         if result == '大吉':
             extra_message = random.choice(MESSAGE_STAR_WARS_DAIKICHI)
 
-            # 大当たり
             if extra_message == '「フォースと共にあらんことを」 (May the Force be with you.)':
                 embed = discord.Embed(title=f'🎉 : {extra_message}')
                 embed.set_image(url=random.choice(MESSAGE_STAR_WARS_DAIKICHI_URL_FORCE))
                 await message.channel.send(embed=embed)
-            else:
-                await message.channel.send(f'🎉 : {extra_message}')
+            elif extra_message == '「戦争は人を偉大にはしない」 (Wars not make one great.)':
+                embed = discord.Embed(title=f'🎉 : {extra_message}')
+                embed.set_image(url=random.choice(MESSAGE_STAR_WARS_DAIKICHI_URL_SENSOU))
+                await message.channel.send(embed=embed)
+            elif extra_message == '「助けて、オビ＝ワン・ケノービ。あなただけが頼りです」(Help me, Obi-Wan Kenobi. You’re my only hope.)':
+                embed = discord.Embed(title=f'🎉 : {extra_message}')
+                embed.set_image(url=random.choice(MESSAGE_STAR_WARS_DAIKICHI_URL_TASUKETE))
+                await message.channel.send(embed=embed)
 
         elif result == '吉':
             extra_message = random.choice(MESSAGE_STAR_WARS_KICHI)
             await message.channel.send(f'🍀 : {extra_message}')
 
+            if extra_message == '「私にはフォースがついている。フォースは私と共にある」(I’m one with the Force. The Force is with me.)':
+                embed = discord.Embed(title=f'🎉 : {extra_message}')
+                embed.set_image(url=random.choice(MESSAGE_STAR_WARS_KICHI_URL_WATASHINIHA))
+                await message.channel.send(embed=embed)
+            elif extra_message == '「あんたが憎い！」「弟と思ってた。愛してた！」 (I hate you! You were my brother, Anakin. I loved you.)':
+                embed = discord.Embed(title=f'🎉 : {extra_message}')
+                embed.set_image(url=random.choice(MESSAGE_STAR_WARS_KICHI_URL_OSOREHA))
+                await message.channel.send(embed=embed)
+            elif extra_message == '「違う！やるか、やらぬかだ。ためしなどいらん。(No! Try not. Do. Or do not. There is no try.)':
+                embed = discord.Embed(title=f'🎉 : {extra_message}')
+                embed.set_image(url=random.choice(MESSAGE_STAR_WARS_KICHI_URL_TIGAU))
+                await message.channel.send(embed=embed)
+
         elif result == '中吉':
-            extra_message = random.choice(MESSAGE_STAR_WARS_SYOKICHI)
+            extra_message = random.choice(MESSAGE_STAR_WARS_TYUKICHI)
             await message.channel.send(f'✨ : {extra_message}')
 
+            if extra_message == '「反乱軍は希望を信じて戦う」 (Rebellions are built on hope.)':
+                embed = discord.Embed(title=f'🎉 : {extra_message}')
+                embed.set_image(url=random.choice(MESSAGE_STAR_WARS_TYUKICHI_URL_HANRAN))
+                await message.channel.send(embed=embed)
+            elif extra_message == '「お前の信念の欠如が気掛かりだ」(I find your lack of faith disturbing.)':
+                embed = discord.Embed(title=f'🎉 : {extra_message}')
+                embed.set_image(url=random.choice(MESSAGE_STAR_WARS_TYUKICHI_URL_OMAENO))
+                await message.channel.send(embed=embed)
+            elif extra_message == '「チューイ、帰ってきたぞ！」(Chewie, we’re home.)':
+                embed = discord.Embed(title=f'🎉 : {extra_message}')
+                embed.set_image(url=random.choice(MESSAGE_STAR_WARS_TYUKICHI_URL_TYUI))
+                await message.channel.send(embed=embed)
+
         elif result == '小吉':
-            extra_message = random.choice(MESSAGE_STAR_WARS_TYUKICHI)
+            extra_message = random.choice(MESSAGE_STAR_WARS_SYOKICHI)
             await message.channel.send(f'🍟 : {extra_message}')
+
+            if extra_message == '「やるか、やらぬかだ。ためしなどいらん。」 (Do. Or do not. There is no try.)':
+                embed = discord.Embed(title=f'🎉 : {extra_message}')
+                embed.set_image(url=random.choice(MESSAGE_STAR_WARS_SYOKICHI_URL_YARUKA))
+                await message.channel.send(embed=embed)
+            elif extra_message == '「愛してる 知ってるさ」(I love you. I know.)':
+                embed = discord.Embed(title=f'🎉 : {extra_message}')
+                embed.set_image(url=random.choice(MESSAGE_STAR_WARS_SYOKICHI_URL_AISITERU))
+                await message.channel.send(embed=embed)
+            elif extra_message == '「私がお前の父親だ」 (I am your father.)':
+                embed = discord.Embed(title=f'🎉 : {extra_message}')
+                embed.set_image(url=random.choice(MESSAGE_STAR_WARS_SYOKICHI_URL_WATASIGA))
+                await message.channel.send(embed=embed)
 
         elif result == '末吉':
             extra_message = random.choice(MESSAGE_STAR_WARS_SUEKITCHI)
             await message.channel.send(f'🍔 : {extra_message}')
 
+            if extra_message == '「やあ、こんにちは！」(Hello there!)':
+                embed = discord.Embed(title=f'🎉 : {extra_message}')
+                embed.set_image(url=random.choice(MESSAGE_STAR_WARS_SUEKITCHI_URL_YA))
+                await message.channel.send(embed=embed)
+            elif extra_message == '「あれは月じゃない」(That’s no moon.)':
+                embed = discord.Embed(title=f'🎉 : {extra_message}')
+                embed.set_image(url=random.choice(MESSAGE_STAR_WARS_SUEKITCHI_URL_AREWATUKI))
+                await message.channel.send(embed=embed)
+            elif extra_message == '「これで自由は死んだわ。万雷の拍手の中でね。」(This is how liberty dies … with thunderous applause.)':
+                embed = discord.Embed(title=f'🎉 : {extra_message}')
+                embed.set_image(url=random.choice(MESSAGE_STAR_WARS_SUEKITCHI_URL_KOREDEJIYUU))
+                await message.channel.send(embed=embed)
+
         elif result == '凶':
             extra_message = random.choice(MESSAGE_STAR_WARS_KYO)
             await message.channel.send(f'😱 : {extra_message}')
+
+            if extra_message == '「嫌な予感がする」 (I have a bad feeling about this.)':
+                embed = discord.Embed(title=f'🎉 : {extra_message}')
+                embed.set_image(url=random.choice(MESSAGE_STAR_WARS_KYO_URL_IYANA))
+                await message.channel.send(embed=embed)
+            elif extra_message == '「お前たちが探しているドロイドではない」(These aren’t the droids you’re looking for.)':
+                embed = discord.Embed(title=f'🎉 : {extra_message}')
+                embed.set_image(url=random.choice(MESSAGE_STAR_WARS_KYO_URL_OMAE))
+                await message.channel.send(embed=embed)
+            elif extra_message == '「終わりだアナキン、私の方が有利だ」(It’s over, Anakin. I have the high ground.)':
+                embed = discord.Embed(title=f'🎉 : {extra_message}')
+                embed.set_image(url=random.choice(MESSAGE_STAR_WARS_KYO_URL_OWARI))
+                await message.channel.send(embed=embed)
 
         elif result == '大凶':
             extra_message = random.choice(MESSAGE_STAR_WARS_DAIKYO)
             await message.channel.send(f'💀 : {extra_message}')
 
-            # 大凶
             if extra_message == '「罠だ！」 (It’s a trap!)':
                 embed = discord.Embed(title=f'🎉 : {extra_message}')
                 embed.set_image(url=random.choice(MESSAGE_STAR_WARS_DAIKYO_URL_TRIP))
