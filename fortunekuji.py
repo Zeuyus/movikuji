@@ -3,6 +3,7 @@ import discord
 import requests
 import os
 import random
+import boto3
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -12,8 +13,8 @@ load_dotenv()
 
 TOKEN = os.getenv("DISCORD_TOKEN")
 LAMBDA_API_URL = os.getenv("LAMBDA_API_URL")
+INSTANCE_ID = os.getenv("EC2_INSTANCE_ID")
 
-# ここも追加分
 OMIKUJI = [
     '大吉', '吉', '中吉', '小吉', '末吉', '凶', '大凶'
     ]
@@ -135,6 +136,28 @@ MESSAGE_STAR_WARS_DAIKYO_URL_UNUBORE = [
     ]
 
 # ========================================================
+# EC2の状態を確認する関数
+# ========================================================
+def check_ec2_state(instance_id):
+    # EC2クライアントの作成
+    ec2 = boto3.client('ec2')
+
+    try:
+        # インスタンスのステータスを取得
+        response = ec2.describe_instances(InstanceIds=[instance_id])
+
+        # インスタンスの状態を取得
+        state = response['Reservations'][0]['Instances'][0]['State']['Name']
+        
+        print(f"EC2インスタンスの状態: {state}")
+
+        return state
+
+    except Exception as e:
+        print(f"EC2ステータス取得中にエラーが発生しました: {e}")
+        return None
+
+# ========================================================
 #  ★ Lambda を呼び出す関数（ここが今回の追加ポイント）
 # ========================================================
 def call_lambda(action: str):
@@ -197,6 +220,33 @@ async def on_message(message):
     #  STARWARS おみくじ
     # --------------------------
     if message.content.strip() == '!STARWARS':
+        # EC2インスタンスの状態を確認
+        ec2_state = check_ec2_state(INSTANCE_ID)
+
+        # EC2インスタンスが停止していた場合、Lambdaで起動処理を実行
+        if ec2_state == 'stopped':
+            await message.channel.send("🚀 サーバーが停止しています。起動中…")
+            result_lambda = call_lambda("start")
+            
+            if "error" in result_lambda:
+                await message.channel.send(f"❌ サーバー起動エラー\n```{result_lambda}```")
+            else:
+                await message.channel.send("✅ サーバーが正常に起動しました。")
+
+        # EC2インスタンスの状態を確認
+        # instance_id = "your-instance-id"  # インスタンスIDを指定
+        # ec2_state = check_ec2_state(instance_id)
+
+        # EC2インスタンスが停止していた場合、Lambdaで起動処理を実行
+        # if ec2_state == 'stopped':
+        #     await message.channel.send("🚀 サーバーが停止しています。起動中…")
+        #     result_lambda = call_lambda("start")
+            
+        #     if "error" in result_lambda:
+        #         await message.channel.send(f"❌ サーバー起動エラー\n```{result_lambda}```")
+        #     else:
+        #         await message.channel.send("✅ サーバーが正常に起動しました。")
+
         result = random.choice(OMIKUJI)
         await message.channel.send(f'あなたの運勢は 「{result}」\n')
 
