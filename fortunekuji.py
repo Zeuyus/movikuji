@@ -81,15 +81,26 @@ MESSAGE_STAR_WARS_DAIKYO = [
 # ========================================================
 def call_lambda(action: str):
     try:
+        print(f"📡 Lambda へ送信: action={action}")
+
         response = requests.post(
             LAMBDA_API_URL,
             json={"action": action},
             timeout=30
         )
-        return response.json()
-    except Exception as e:
-        return {"error": str(e)}
 
+        print(f"📡 Lambda 応答ステータス: {response.status_code}")
+        print(f"📡 Lambda 応答内容: {response.text}")
+
+        # JSON 化できない場合はそのまま返す
+        try:
+            return response.json()
+        except Exception:
+            return {"error": "Invalid JSON response", "raw": response.text}
+
+    except Exception as e:
+        print(f"❌ Lambda 呼び出しエラー: {e}")
+        return {"error": str(e)}
 
 # ========================================================
 #  Discord Bot メイン処理
@@ -173,29 +184,31 @@ async def on_message(message):
                 embed.set_image(url=random.choice(MESSAGE_STAR_WARS_DAIKYO_URL_UNUBORE))
                 await message.channel.send(embed=embed)
 
-# =====================================================
-    #   ★ EC2 起動コマンド
-    # =====================================================
-    if message.content.strip() == '!ec2_start':
-        await message.channel.send("🚀 EC2 の起動をリクエストしました...")
+    #===========================================================
+    #  EC2 起動
+    #===========================================================
+    if message.content == '!ec2_start':
+        await message.channel.send("🚀 EC2 起動リクエスト中…")
+
         result = call_lambda("start")
 
         if "error" in result:
-            await message.channel.send(f"❌ エラー: {result['error']}")
+            await message.channel.send(f"❌ エラー発生\n```{result}```")
         else:
-            await message.channel.send(f"✅ Lambda 実行完了: {result}")
+            await message.channel.send(f"✅ 成功\n```{result}```")
 
 
-    # =====================================================
-    #   ★ EC2 停止コマンド
-    # =====================================================
-    if message.content.strip() == '!ec2_stop':
-        await message.channel.send("🛑 EC2 の停止をリクエストしました...")
+    #===========================================================
+    #  EC2 停止
+    #===========================================================
+    if message.content == '!ec2_stop':
+        await message.channel.send("🛑 EC2 停止リクエスト中…")
+
         result = call_lambda("stop")
 
         if "error" in result:
-            await message.channel.send(f"❌ エラー: {result['error']}")
+            await message.channel.send(f"❌ エラー発生\n```{result}```")
         else:
-            await message.channel.send(f"🟢 Lambda 実行完了: {result}")
+            await message.channel.send(f"🟢 成功\n```{result}```")
 
 client.run(TOKEN)
