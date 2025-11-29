@@ -221,23 +221,9 @@ async def on_message(message):
     # --------------------------
     if message.content.strip() == '!STARWARS':
         # EC2インスタンスの状態を確認
-        ec2_state = check_ec2_state(INSTANCE_ID)
+        # ec2_state = check_ec2_state(INSTANCE_ID)
 
-        # EC2インスタンスが停止していた場合、Lambdaで起動処理を実行
-        if ec2_state == 'stopped':
-            await message.channel.send("🚀 サーバーが停止しています。起動中…")
-            result_lambda = call_lambda("start")
-            
-            if "error" in result_lambda:
-                await message.channel.send(f"❌ サーバー起動エラー\n```{result_lambda}```")
-            else:
-                await message.channel.send("✅ サーバーが正常に起動しました。")
-
-        # EC2インスタンスの状態を確認
-        # instance_id = "your-instance-id"  # インスタンスIDを指定
-        # ec2_state = check_ec2_state(instance_id)
-
-        # EC2インスタンスが停止していた場合、Lambdaで起動処理を実行
+        # # EC2インスタンスが停止していた場合、Lambdaで起動処理を実行
         # if ec2_state == 'stopped':
         #     await message.channel.send("🚀 サーバーが停止しています。起動中…")
         #     result_lambda = call_lambda("start")
