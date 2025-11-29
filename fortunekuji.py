@@ -170,18 +170,14 @@ def call_lambda(action: str):
             timeout=30
         )
 
-        # debuq
-        # print(f"📡 Lambda 応答ステータス: {response.status_code}")
-        # print(f"📡 Lambda 応答内容: {response.text}")
-
-        # ステータスコードが 400 以上の場合、エラーとして処理
         if response.status_code >= 400:
+            print(f"❌ Lambda呼び出しに失敗: {response.status_code}, {response.text}")
             return {"error": f"Lambda API call failed with status code {response.status_code}", "details": response.text}
 
-        # JSON 化できない場合はそのまま返す
         try:
             return response.json()
         except Exception:
+            print("❌ Lambdaのレスポンスが無効なJSONです")
             return {"error": "Invalid JSON response", "raw": response.text}
 
     except Exception as e:
