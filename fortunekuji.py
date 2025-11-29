@@ -18,8 +18,10 @@ OMIKUJI = [
     '大吉', '吉', '中吉', '小吉', '末吉', '凶', '大凶'
     ]
 
-MESSAGE = [
-    '平凡な風景が、突然意味のある何かに変わる。陳腐でつまらない景色が美しく光り輝く真珠になる。音楽でね。'
+MESSAGE_STAR_WARS_DAIKICHI = [
+    '「フォースと共にあらんことを」 (May the Force be with you.)'
+    ,'「戦争は人を偉大にはしない」 (Wars not make one great.)'
+    ,'「助けて、オビ＝ワン・ケノービ。あなただけが頼りです」(Help me, Obi-Wan Kenobi. You’re my only hope.)'
     ]
 
 MESSAGE_STAR_WARS_DAIKICHI_URL_FORCE = [
@@ -28,6 +30,98 @@ MESSAGE_STAR_WARS_DAIKICHI_URL_FORCE = [
     ,'https://livedoor.blogimg.jp/swgm1138/imgs/a/a/aabe64f6.png'
     ,'https://livedoor.blogimg.jp/swgm1138/imgs/4/f/4f09d098.png'
     ,'https://livedoor.blogimg.jp/swgm1138/imgs/5/b/5b576202.png'
+    ]
+MESSAGE_STAR_WARS_DAIKICHI_URL_SENSOU = [
+    'https://hollywoodreporter.jp/wp-content/uploads/2025/03/13Star-Wars-Yoda-Everett-MSDEMST_EC017-H-2023.jpg'
+    ]
+MESSAGE_STAR_WARS_DAIKICHI_URL_TASUKETE = [
+    'https://hollywoodreporter.jp/wp-content/uploads/2025/03/12Star-Wars-Carrie-Fisher-R2D2-Everett-MSDSTWA_EC102-H-2023.jpg'
+    ]
+
+MESSAGE_STAR_WARS_KICHI = [
+    '「私にはフォースがついている。フォースは私と共にある」(I’m one with the Force. The Force is with me.)'
+    ,'「あんたが憎い！」「弟と思ってた。愛してた！」 (I hate you! You were my brother, Anakin. I loved you..)'
+    ,'「違う！やるか、やらぬかだ。ためしなどいらん。(No! Try not. Do. Or do not. There is no try.)」'
+    ]
+
+MESSAGE_STAR_WARS_KICHI_URL_WATASHINIHA = [
+    'https://hollywoodreporter.jp/wp-content/uploads/2025/03/8rogueone57ff8b775caac-embed_0.jpg'
+    ]
+MESSAGE_STAR_WARS_KICHI_URL_OSOREHA = [
+    'https://castel.jp/item/34496/'
+    ]
+MESSAGE_STAR_WARS_KICHI_URL_TIGAU = [
+    'https://pbs.twimg.com/media/DsAi8I1VsAAkGhN.jpg'
+    ]
+
+MESSAGE_STAR_WARS_TYUKICHI = [
+    '「反乱軍は希望を信じて戦う」 (Rebellions are built on hope.)'
+    ,'「お前の信念の欠如が気掛かりだ」(I find your lack of faith disturbing.)'
+    ,'「チューイ、帰ってきたぞ！」(Chewie, we’re home.)'
+    ]
+
+MESSAGE_STAR_WARS_TYUKICHI_URL_HANRAN = [
+    'https://hollywoodreporter.jp/wp-content/uploads/2025/03/9MCDROON_EC037-H-2023.jpg'
+    ]
+MESSAGE_STAR_WARS_TYUKICHI_URL_OMAENO = [
+    'https://hollywoodreporter.jp/wp-content/uploads/2025/03/10Star-Wars-Darth-Vader-Everett-MMDSTWA_FE009-H-2023.jpg'
+    ]
+MESSAGE_STAR_WARS_TYUKICHI_URL_TYUI = [
+    'https://hollywoodreporter.jp/wp-content/uploads/2025/03/20Star-Wars-Chewbacca-Harrison-Ford-Everett-MCDSTWA_EC145-H-2023.jpg'
+    ]
+
+MESSAGE_STAR_WARS_SYOKICHI = [
+    '「やるか、やらぬかだ。ためしなどいらん。」 (Do. Or do not. There is no try.)'
+    ,'「愛してる 知ってるさ」(I love you. I know.)'
+    ,'「私がお前の父親だ」 (I am your father.)'
+    ]
+
+MESSAGE_STAR_WARS_SYOKICHI_URL_YARUKA = [
+    'https://hollywoodreporter.jp/wp-content/uploads/2025/03/6Star-Wars-Yoda-R2D2-Everett-MSDEMST_EC030-H-2023.jpg'
+    ]
+MESSAGE_STAR_WARS_SYOKICHI_URL_AISITERU = [
+    'https://hollywoodreporter.jp/wp-content/uploads/2025/03/4Star-Wars-Carrie-Fisher-Harrison-Ford-2-Everett-MBDSTWA_FE006-H-2023.jpg'
+    ]
+MESSAGE_STAR_WARS_SYOKICHI_URL_WATASIGA = [
+    'https://hollywoodreporter.jp/wp-content/uploads/2025/03/5star_wars_the_empire_strikes_back.jpg'
+    ]
+
+MESSAGE_STAR_WARS_SUEKITCHI = [
+    '「やあ、こんにちは！」(Hello there!)'
+    ,'「あれは月じゃない」(That’s no moon.)'
+    ,'「これで自由は死んだわ。万雷の拍手の中でね。」(This is how liberty dies … with thunderous applause.)'
+    ]
+
+MESSAGE_STAR_WARS_SUEKITCHI_URL_YA = [
+    'https://hollywoodreporter.jp/wp-content/uploads/2025/03/3Star-Wars-Alec-Guinness-Everett-MSDSTWA_EC007-H-2023.jpg'
+    ]
+MESSAGE_STAR_WARS_SUEKITCHI_URL_AREWATUKI = [
+    'https://hollywoodreporter.jp/wp-content/uploads/2025/03/19MSDSTWA_FE099-H-2022.jpg'
+    ]
+MESSAGE_STAR_WARS_SUEKITCHI_URL_KOREDEJIYUU = [
+    'https://hollywoodreporter.jp/wp-content/uploads/2025/03/18Star-Wars-Natalie-Portman-Everett-MCDSTWA_FE027-H-2023.jpg'
+    ]
+
+MESSAGE_STAR_WARS_KYO = [
+    '「嫌な予感がする」 (I have a bad feeling about this.)'
+    ,'「お前たちが探しているドロイドではない」(These aren’t the droids you’re looking for.)'
+    ,'「終わりだアナキン、私の方が有利だ」(It’s over, Anakin. I have the high ground.)'
+    ]
+
+MESSAGE_STAR_WARS_KYO_URL_IYANA = [
+    'https://hollywoodreporter.jp/wp-content/uploads/2025/03/2Star-Wars-Millennium-Falcon-Scene-Everett-MBDSTWA_FE035-H-2023.jpg'
+    ]
+MESSAGE_STAR_WARS_KYO_URL_OMAE = [
+    'https://hollywoodreporter.jp/wp-content/uploads/2025/03/11Star-Wars-Stormtroopers-Alec-Guinness-Everett-MSDSTWA_EC095-H-2023.jpg'
+    ]
+MESSAGE_STAR_WARS_KYO_URL_OWARI = [
+    'https://hollywoodreporter.jp/wp-content/uploads/2025/03/14Star-Wars-Ewan-McGregor-Hayden-Christensen-Everett-MCDSTWA_FE058-H-2023.jpg'
+    ]
+
+MESSAGE_STAR_WARS_DAIKYO = [
+    '「罠だ！」 (It’s a trap!)'
+    ,'「確率なんてクソくらえだ！」(Never tell me the odds!)'
+    ,'「自惚れ屋の、戯け者の、みすぼらしいナーフ飼いなんかに！」(Why, you stuck-up, half-witted, scruffy-looking …nerf-herder!)'
     ]
 
 MESSAGE_STAR_WARS_DAIKYO_URL_TRIP = [
@@ -38,42 +132,6 @@ MESSAGE_STAR_WARS_DAIKYO_URL_KAKURITU = [
     ]
 MESSAGE_STAR_WARS_DAIKYO_URL_UNUBORE = [
     'https://hollywoodreporter.jp/wp-content/uploads/2025/03/16Star-Wars-Carrie-Fisher-Harrison-Ford-Everett-MSDEMST_EC052.-H-2023jpg.jpg'
-    ]
-
-MESSAGE_STAR_WARS_DAIKICHI = [
-    '「フォースと共にあらんことを」 (May the Force be with you.)'
-    ,'「希望は太陽のようなもの。見える時だけ信じるなら、夜を越えることはできない」 (Hope is like the sun. If you only believe in it when you can see it, you will never make it through the night.)'
-    ,'「助けて、オビ＝ワン・ケノービ。あなただけが頼りです」(Help me, Obi-Wan Kenobi. You’re my only hope.)'
-    ]
-MESSAGE_STAR_WARS_KICHI = [
-    '「戦争は人を偉大にはしない」 (Wars not make one great.)'
-    ,'「私にはフォースがついている。フォースは私と共にある」(I’m one with the Force. The Force is with me.)'
-    ,'「恐れはダークサイドに通じる。恐れは怒りに、怒りは憎しみに、憎しみは苦痛へ」 (Fear is the path to the dark side. Fear leads to anger. Anger leads to hate. Hate leads to suffering.)'
-    ]
-MESSAGE_STAR_WARS_TYUKICHI = [
-    '「反乱軍は希望を信じて戦う」 (Rebellions are built on hope.)'
-    ,'「お前の信念の欠如が気掛かりだ」(I find your lack of faith disturbing.)'
-    ,'「チューイ、帰ってきたぞ！」(Chewie, we’re home.)'
-    ]
-MESSAGE_STAR_WARS_SYOKICHI = [
-    '「やるか、やらぬかだ。ためしなどいらん。」 (Do. Or do not. There is no try.)'
-    ,'「愛してる 知ってるさ」(I love you. I know.)'
-    ,'「私がお前の父親だ」 (I am your father.)'
-    ]
-MESSAGE_STAR_WARS_SUEKITCHI = [
-    '「やあ、こんにちは！」(Hello there!)'
-    ,'「あれは月じゃない」(That’s no moon.)'
-    ,'「これで自由は死んだわ。万雷の拍手の中でね。」(This is how liberty dies … with thunderous applause.)'
-    ]
-MESSAGE_STAR_WARS_KYO = [
-    '「嫌な予感がする」 (I have a bad feeling about this.)'
-    ,'「お前たちが探しているドロイドではない」(These aren’t the droids you’re looking for.)'
-    ,'「終わりだアナキン、私の方が有利だ」(It’s over, Anakin. I have the high ground.)'
-    ]
-MESSAGE_STAR_WARS_DAIKYO = [
-    '「罠だ！」 (It’s a trap!)'
-    ,'「確率なんてクソくらえだ！」(Never tell me the odds!)'
-    ,'「自惚れ屋の、戯け者の、みすぼらしいナーフ飼いなんかに！」(Why, you stuck-up, half-witted, scruffy-looking …nerf-herder!)'
     ]
 
 # ========================================================
