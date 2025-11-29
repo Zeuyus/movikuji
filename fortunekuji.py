@@ -76,8 +76,6 @@ MESSAGE_STAR_WARS_DAIKYO = [
     ,'「自惚れ屋の、戯け者の、みすぼらしいナーフ飼いなんかに！」(Why, you stuck-up, half-witted, scruffy-looking …nerf-herder!)'
     ]
 
-# processed_messages = set()
-
 # ========================================================
 #  ★ Lambda を呼び出す関数（ここが今回の追加ポイント）
 # ========================================================
@@ -91,8 +89,9 @@ def call_lambda(action: str):
             timeout=30
         )
 
-        print(f"📡 Lambda 応答ステータス: {response.status_code}")
-        print(f"📡 Lambda 応答内容: {response.text}")
+        # debuq
+        # print(f"📡 Lambda 応答ステータス: {response.status_code}")
+        # print(f"📡 Lambda 応答内容: {response.text}")
 
         # ステータスコードが 400 以上の場合、エラーとして処理
         if response.status_code >= 400:
@@ -117,14 +116,10 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    # メッセージがすでに処理されている場合はスキップ
     if message.author == client.user:
         return
 
     print(f"[LOG] message received: {message.content}")
-
-    # メッセージを処理済みとしてフラグを立てる
-    # processed_messages.add(message.id)
 
     # --------------------------
     #  おみくじ
@@ -199,14 +194,26 @@ async def on_message(message):
         # ========================================
         #  EC2 起動処理を必ず実行
         # ========================================
-        await message.channel.send("🚀 EC2 起動リクエスト中…")
+        # await message.channel.send("🚀 Server起動中…")
         result_lambda = call_lambda("start")
 
         # Lambda のエラーとステータスコードをチェック
         if "error" in result_lambda:
-            await message.channel.send(f"❌ EC2 起動エラー\n```{result_lambda}```")
-        else:
-            await message.channel.send(f"✅ EC2 起動成功\n```{result_lambda}```")
+            await message.channel.send(f"❌ Server起動エラー\n```{result_lambda}```")
+        # else:
+        #     await message.channel.send(f"✅ Server起動成功\n```{result_lambda}```")
+
+        # ========================================
+        #  EC2 停止処理を必ず実行
+        # ========================================
+        # await message.channel.send("🛑 Server停止中…")
+        result_lambda = call_lambda("stop")
+
+        # Lambda のエラーとステータスコードをチェック
+        if "error" in result_lambda:
+            await message.channel.send(f"❌ Server停止エラー\n```{result_lambda}```")
+        # else:
+        #     await message.channel.send(f"✅ Server停止成功\n```{result_lambda}```")
 
     # #===========================================================
     # #  EC2 起動
