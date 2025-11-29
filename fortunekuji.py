@@ -14,6 +14,11 @@ client = discord.Client(intents=intents)
 TOKEN = os.getenv("DISCORD_TOKEN")
 LAMBDA_API_URL = os.getenv("LAMBDA_API_URL")
 
+if not TOKEN:
+    print("ERROR: トークンが正しく設定されていません。")
+else:
+    print(f"トークンは正常に読み込まれました: {TOKEN[:5]}...")  # トークンの先頭5文字だけ表示
+
 # ここも追加分
 OMIKUJI = [
     '大吉', '吉', '中吉', '小吉', '末吉', '凶', '大凶'
