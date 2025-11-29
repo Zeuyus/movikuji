@@ -4,6 +4,7 @@ import requests
 import os
 import random
 import boto3
+import time
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -158,6 +159,20 @@ def check_ec2_state(instance_id):
         return None
 
 # ========================================================
+# EC2の起動まで待機する関数
+# ========================================================
+def wait_for_instance_to_run(instance_id):
+    ec2 = boto3.client('ec2')
+    while True:
+        response = ec2.describe_instances(InstanceIds=[instance_id])
+        state = response['Reservations'][0]['Instances'][0]['State']['Name']
+        if state == 'running':
+            print("EC2インスタンスが起動しました！")
+            return True
+        print("インスタンス起動待機中...")
+        time.sleep(10)  # 10秒待機してから再チェック
+
+# ========================================================
 #  ★ Lambda を呼び出す関数（ここが今回の追加ポイント）
 # ========================================================
 def call_lambda(action: str):
@@ -228,9 +243,7 @@ async def on_message(message):
                 await message.channel.send(f"❌ サーバー起動エラー\n```{result_lambda}```")
             else:
                 await message.channel.send("✅ サーバーが正常に起動しました。")
-
-        result = random.choice(OMIKUJI)
-        await message.channel.send(f'あなたの運勢は 「{result}」\n')
+                wait_for_instance_to_run(INSTANCE_ID)  # 起動が完了するまで待機
 
         if result == '大吉':
             extra_message = random.choice(MESSAGE_STAR_WARS_DAIKICHI)
