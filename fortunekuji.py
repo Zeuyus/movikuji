@@ -136,80 +136,64 @@ MESSAGE_STAR_WARS_DAIKYO_URL_UNUBORE = [
     'https://hollywoodreporter.jp/wp-content/uploads/2025/03/16Star-Wars-Carrie-Fisher-Harrison-Ford-Everett-MSDEMST_EC052.-H-2023jpg.jpg'
     ]
 
-# ========================================================
-# EC2の状態を確認する関数
-# ========================================================
+# =============================================
+# AWS EC2 状態チェック
+# =============================================
 def check_ec2_state(instance_id):
-    # EC2クライアントの作成
     ec2 = boto3.client('ec2')
-
     try:
-        # インスタンスのステータスを取得
         response = ec2.describe_instances(InstanceIds=[instance_id])
-
-        # インスタンスの状態を取得
         state = response['Reservations'][0]['Instances'][0]['State']['Name']
-        
-        print(f"EC2インスタンスの状態: {state}")
-
+        print(f"EC2 state: {state}")
         return state
-
     except Exception as e:
-        print(f"EC2ステータス取得中にエラーが発生しました: {e}")
+        print("EC2 status error:", e)
         return None
 
-# ========================================================
-# EC2の起動まで待機する関数
-# ========================================================
-def wait_for_instance_to_run(instance_id):
+
+# =============================================
+# 非同期で EC2 起動待ち
+# =============================================
+async def wait_for_instance_to_run(instance_id):
     ec2 = boto3.client('ec2')
     while True:
         response = ec2.describe_instances(InstanceIds=[instance_id])
         state = response['Reservations'][0]['Instances'][0]['State']['Name']
         if state == 'running':
-            print("EC2インスタンスが起動しました！")
-            return True
-        print("インスタンス起動待機中...")
-        time.sleep(10)  # 10秒待機してから再チェック
+            print("EC2 ready!")
+            return
+        await asyncio.sleep(5)
 
-# ========================================================
-#  ★ Lambda を呼び出す関数（ここが今回の追加ポイント）
-# ========================================================
+
+# =============================================
+# Lambda API 呼び出し
+# =============================================
 def call_lambda(action: str):
     try:
-        print(f"📡 Lambda へ送信: action={action}")
-
         response = requests.post(
             LAMBDA_API_URL,
             json={"action": action},
-            timeout=30
+            timeout=20
         )
-
-        if response.status_code >= 400:
-            print(f"❌ Lambda呼び出しに失敗: {response.status_code}, {response.text}")
-            return {"error": f"Lambda API call failed with status code {response.status_code}", "details": response.text}
-
-        try:
-            return response.json()
-        except Exception:
-            print("❌ Lambdaのレスポンスが無効なJSONです")
-            return {"error": "Invalid JSON response", "raw": response.text}
-
+        return response.json()
     except Exception as e:
-        print(f"❌ Lambda 呼び出しエラー: {e}")
         return {"error": str(e)}
 
-# ========================================================
-#  Discord Bot メイン処理
-# ========================================================
+
+# =============================================
+# Discord イベント
+# =============================================
 @client.event
 async def on_ready():
     print(f'Logged in as {client.user}')
+
 
 @client.event
 async def on_message(message):
     if message.author == client.user:
         return
+
+    content = message.content.strip()
 
     print(f"[LOG] message received: {message.content}")
 
@@ -367,8 +351,8 @@ async def on_message(message):
         # result_lambda = call_lambda("start")
 
         # Lambda のエラーとステータスコードをチェック
-        if "error" in result_lambda:
-            await message.channel.send(f"❌ Server起動エラー\n```{result_lambda}```")
+        # if "error" in result_lambda:
+        #     await message.channel.send(f"❌ Server起動エラー\n```{result_lambda}```")
         # else:
         #     await message.channel.send(f"✅ Server起動成功\n```{result_lambda}```")
 
@@ -379,8 +363,8 @@ async def on_message(message):
         # result_lambda = call_lambda("stop")
 
         # Lambda のエラーとステータスコードをチェック
-        if "error" in result_lambda:
-            await message.channel.send(f"❌ Server停止エラー\n```{result_lambda}```")
+        # if "error" in result_lambda:
+        #     await message.channel.send(f"❌ Server停止エラー\n```{result_lambda}```")
         # else:
         #     await message.channel.send(f"✅ Server停止成功\n```{result_lambda}```")
 
