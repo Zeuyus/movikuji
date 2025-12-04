@@ -275,7 +275,7 @@ async def on_message(message):
                 embed = discord.Embed(title=f'🍀 : {extra_message}')
                 embed.set_image(url=random.choice(MESSAGE_STAR_WARS_KICHI_URL_OSOREHA))
                 await message.channel.send(embed=embed)
-            elif extra_message == '「違う！やるか、やらぬかだ。ためしなどいらん。(No! Try not. Do. Or do not. There is no try.)':
+            elif extra_message == '「違う！やるか、やらぬかだ。ためしなどいらん。」(No! Try not. Do. Or do not. There is no try.)':
                 embed = discord.Embed(title=f'🍀 : {extra_message}')
                 embed.set_image(url=random.choice(MESSAGE_STAR_WARS_KICHI_URL_TIGAU))
                 await message.channel.send(embed=embed)
@@ -364,7 +364,7 @@ async def on_message(message):
         #  EC2 起動処理を必ず実行
         # ========================================
         # await message.channel.send("🚀 Server起動中…")
-        result_lambda = call_lambda("start")
+        # result_lambda = call_lambda("start")
 
         # Lambda のエラーとステータスコードをチェック
         if "error" in result_lambda:
@@ -376,7 +376,7 @@ async def on_message(message):
         #  EC2 停止処理を必ず実行
         # ========================================
         # await message.channel.send("🛑 Server停止中…")
-        result_lambda = call_lambda("stop")
+        # result_lambda = call_lambda("stop")
 
         # Lambda のエラーとステータスコードをチェック
         if "error" in result_lambda:
